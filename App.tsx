@@ -10,12 +10,11 @@ import { NativeScreenNavigationContainer } from 'react-native-screens';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { NavigationContainer } from '@react-navigation/native';
 import ListContactScreen from './src/screens/list_contact';
-
-// import type {PropsWithChildren} from 'react';
-
-// type SectionProps = PropsWithChildren<{
-//   title: string;
-// }>;
+import MainScreen from './src/screens/main';
+import AddContactScreen from './src/screens/entry_contact/add_contact';
+import { ADD_CONTACT_ROUTE, DETAIL_CONTACT_ROUTE, EDIT_CONTACT_ROUTE } from './src/utils/route';
+import DetailContactScreen from './src/screens/detail_contact';
+import EditContactScreen from './src/screens/entry_contact/edit_contact';
 
 const Stack = createNativeStackNavigator();
 
@@ -24,11 +23,21 @@ function App(): React.JSX.Element {
   return (
     <NavigationContainer>
       <Stack.Navigator>
-        <Stack.Screen name="ListContact" component={ListContactScreen} options={{title: 'List Contact'}}/>
+        <Stack.Screen name="main" component={MainScreen} options={{headerShown: false}}/>
+        <Stack.Screen name={ADD_CONTACT_ROUTE} component={AddContactScreen} options={{title: 'Add Contact'}}/>
+        <Stack.Screen name={EDIT_CONTACT_ROUTE} component={EditContactScreen} options={{title: 'Edit Contact'}}/>
+        <Stack.Screen name={DETAIL_CONTACT_ROUTE} component={DetailContactScreen} options={{title: 'Detail Contact'}}/>
       </Stack.Navigator>
     </NavigationContainer>
   );
 }
+
+// import type {PropsWithChildren} from 'react';
+
+// type SectionProps = PropsWithChildren<{
+//   title: string;
+// }>;
+
 
 // function Section({children, title}: SectionProps): React.JSX.Element {
 //   const isDarkMode = useColorScheme() === 'dark';
