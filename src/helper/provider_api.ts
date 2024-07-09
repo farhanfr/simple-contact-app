@@ -27,13 +27,13 @@ export const PROVIDER_GET = async (pathUrl: string) => {
     return response
 }
 
-export const PROVIDER_POST = async (pathUrl: string, data: any, useRawData:boolean = true) => {
+export const PROVIDER_POST = async (pathUrl: string, data: any, useRawData: boolean = true) => {
 
     const headers = {
         'Content-Type': 'application/json',
         // 'api-key': API_KEY
     }
-    
+
     const body = useRawData ? JSON.stringify(data) : data
 
     const response = await axios.post(`${BASE_URL}/${pathUrl}`, body, { headers })
@@ -48,7 +48,7 @@ export const PROVIDER_POST = async (pathUrl: string, data: any, useRawData:boole
                     break;
             }
         }).catch(err => {
-            console.log("status =>" , err.response.status)
+            console.log("status =>", err.response.status)
             switch (err.response.status) {
                 case 400:
                     throw err.response.data
@@ -89,19 +89,34 @@ export const PROVIDER_DELETE = async (pathUrl: string) => {
                     break;
             }
         }).catch(err => {
-            throw err
+            console.log("status =>", err.response.status)
+            switch (err.response.status) {
+                case 400:
+                    throw err.response.data
+                case 401:
+                    throw err.response.data
+                case 403:
+                    throw "forbidden"
+                case 404:
+                    throw err.response.data
+                case 500:
+                    throw err.response.data
+                default:
+                    console.log("error")
+                    break;
+            }
         })
 
     return response
 }
 
-export const PROVIDER_PUT = async (pathUrl: string, data: any, useRawData:boolean = true) => {
+export const PROVIDER_PUT = async (pathUrl: string, data: any, useRawData: boolean = true) => {
 
     const headers = {
         'Content-Type': 'application/json',
         // 'api-key': API_KEY
     }
-    
+
     const body = useRawData ? JSON.stringify(data) : data
 
     const response = await axios.put(`${BASE_URL}/${pathUrl}`, body, { headers })
@@ -116,7 +131,7 @@ export const PROVIDER_PUT = async (pathUrl: string, data: any, useRawData:boolea
                     break;
             }
         }).catch(err => {
-            console.log("status =>" , err.response.status)
+            console.log("status =>", err.response.status)
             switch (err.response.status) {
                 case 400:
                     throw err.response.data

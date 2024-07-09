@@ -19,17 +19,17 @@ const EditContactScreen = () => {
     const [loading, setLoading] = useState<boolean>(false)
 
     const alwaysShowToastLoading = () => {
-        Toast.loading('Contact successfully added, redirect to list contact', 0, () => {
+        Toast.loading('Contact successfully edited, redirect to detail contact', 0, () => {
             navigation.goBack()
         })
         setTimeout(() => {
             Toast.removeAll()
-        }, 3000)
+        }, 1000)
     }
 
     const handleSubmit = async () => {
         console.log(valueInput)
-        if (valueInput.firstName == "" || valueInput.lastName == "" || valueInput.age == 0) {
+        if (valueInput.firstName == "" || valueInput.lastName == "" || valueInput.age == 0 || valueInput.photo == "") {
             Toast.fail("Please fill all field", 1)
         } else {
             setLoading(true)
@@ -51,7 +51,7 @@ const EditContactScreen = () => {
             <View style={{ backgroundColor: '#fff', flex: 1 }}>
                 <List style={{ padding: 16 }}>
                     <List.Item style={{ borderWidth: 0.5, marginBottom: 16, borderColor: 'grey' }}>
-                        <Text>Firstname</Text>
+                        <Text style={{ fontWeight: 'bold' }}>Firstname</Text>
                         <InputItem
                             textAlign='left'
                             value={valueInput.firstName}
@@ -61,7 +61,7 @@ const EditContactScreen = () => {
                         </InputItem>
                     </List.Item>
                     <List.Item style={{ borderWidth: 0.5, marginBottom: 16, borderColor: 'grey' }}>
-                        <Text>Lastname</Text>
+                        <Text style={{ fontWeight: 'bold' }}>Lastname</Text>
                         <InputItem
                             value={valueInput.lastName}
                             name='lastname'
@@ -70,7 +70,7 @@ const EditContactScreen = () => {
                         </InputItem>
                     </List.Item>
                     <List.Item style={{ borderWidth: 0.5, marginBottom: 16, borderColor: 'grey' }}>
-                        <Text>Age</Text>
+                        <Text style={{ fontWeight: 'bold' }}>Age</Text>
                         <InputItem
                             value={valueInput.age.toString()}
                             type='number'
@@ -79,8 +79,15 @@ const EditContactScreen = () => {
                             placeholder="Insert Age">
                         </InputItem>
                     </List.Item>
-                    <List.Item>
-                        <Text>Photo</Text>
+                    <List.Item style={{ borderWidth: 0.5, marginBottom: 16, borderColor: 'grey' }}>
+                        <Text style={{ fontWeight: 'bold' }}>Photo (Link)</Text>
+                        <InputItem
+                            textAlign='left'
+                            value={valueInput.photo}
+                            name='photo'
+                            onChange={(value: any) => setValueInput({ ...valueInput, photo: value })}
+                            placeholder="Insert Link https//...">
+                        </InputItem>
                     </List.Item>
                     <Button type='primary' onPress={handleSubmit} loading={loading}>Submit</Button>
                 </List>

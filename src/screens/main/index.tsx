@@ -5,6 +5,7 @@ import { Text,View } from 'react-native'
 import { Icon, Provider, SearchBar, TabBar  } from '@ant-design/react-native'
 import { primary } from '../../utils/colors'
 import ListContactScreen from '../list_contact'
+import ListFavouriteScreen from '../list_favourite'
 
 const MainScreen = () => {
 
@@ -34,7 +35,7 @@ const MainScreen = () => {
         //   badge={2}
           selected={selectedTab === 'redTab'}
           onPress={() => onChangeTab('redTab')}>
-          <Text>asas</Text>
+          <ListFavouriteScreen/>
         </TabBar.Item>
         {/* <TabBar.Item
           icon={<Icon name="like" />}

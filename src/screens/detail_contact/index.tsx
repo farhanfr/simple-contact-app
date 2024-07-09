@@ -1,16 +1,25 @@
-import { Modal, Provider, Text, Toast, View } from '@ant-design/react-native'
+import { Icon, Modal, Provider, Text, Toast, View } from '@ant-design/react-native'
 import { useRoute, useNavigation, useFocusEffect } from '@react-navigation/native';
 import React, { useEffect, useState } from 'react'
 import { IContact } from '../../data/contact';
 import { deleteContact, fetchDetallContact } from '../../services/contact_service';
 import CustomLoader from '../../components/CustomLoader';
-import { TouchableOpacity } from 'react-native';
+import { Image, TouchableOpacity } from 'react-native';
 import { EDIT_CONTACT_ROUTE } from '../../utils/route';
+import { useSelector, useDispatch } from 'react-redux';
+import { addFavourite, checkFavourite, removeFavourite } from '../../redux/contactSlice';
+import { RootState } from '../../redux/store';
+import { validateImg } from '../../utils/extensions';
+import { danger, success, textPrimary, warning } from '../../utils/colors';
 
 const DetailContactScreen = () => {
 
     const route = useRoute()
     const navigation = useNavigation()
+    const dispatch = useDispatch();
+
+    const isFavourite = useSelector((state: RootState) => state.contacts.isFavourite)
+
     const { id }: any = route.params
 
     const [contactData, setContactData] = useState<IContact>()
@@ -20,6 +29,8 @@ const DetailContactScreen = () => {
         setIsLoading(true)
         await fetchDetallContact(id).then(res => {
             setContactData(res.data)
+            console.log("testing", res.data.id)
+            handleCheckFavourite(res.data.id)
             setIsLoading(false)
         }).catch(err => {
             Toast.fail("Get contact failed", 1)
@@ -46,6 +57,50 @@ const DetailContactScreen = () => {
         ])
     }
 
+    const handleFavourite = () => {
+        if (isFavourite) {
+            dispatch(removeFavourite(contactData?.id))
+        } else {
+            dispatch(addFavourite(contactData))
+        }
+
+    }
+
+    const handleCheckFavourite = (id: string) => {
+        dispatch(checkFavourite(id))
+    }
+
+    const renderMenu = () => {
+        return (
+
+            <View style={{paddingHorizontal: 12}}>
+                <TouchableOpacity onPress={() => {
+                    navigation.navigate(EDIT_CONTACT_ROUTE, {
+                        contact: contactData
+                    });
+                }}>
+                    <View style={{display: 'flex', flexDirection: 'row',paddingVertical: 12}}>
+                        <Icon name='edit'size={'lg'} color={'grey'}/>
+                        <Text style={{fontWeight:'500',fontSize:20,marginLeft:12}}>Edit</Text>
+                    </View>
+                </TouchableOpacity>
+                <TouchableOpacity onPress={() => ModalAlert()}>
+                    <View style={{display: 'flex', flexDirection: 'row',paddingVertical: 12}}>
+                    <Icon name='delete' size={'lg'} color={'grey'}/>
+                    <Text style={{fontWeight:'500',fontSize:20,marginLeft:12}}>Delete</Text>
+                    </View>
+                </TouchableOpacity>
+                <TouchableOpacity onPress={() => handleFavourite()}>
+                    <View style={{display: 'flex', flexDirection: 'row',paddingVertical: 12}}>
+                        <Icon name='heart' size={'lg'} color={isFavourite ? danger : 'grey'}/>
+                       <Text style={{fontWeight:'500',fontSize:20,marginLeft:12}}>{isFavourite ? "Remove" : "Add"} Favourite</Text> 
+                    </View>
+                </TouchableOpacity>
+            </View>
+
+        )
+    }
+
     useFocusEffect(
         React.useCallback(() => {
             handleFetchDetail()
@@ -56,31 +111,9 @@ const DetailContactScreen = () => {
             };
         }, []))
 
-    const renderMenuBottom = () => {
-        return (
-
-            <View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', width: '100%', height: 50, backgroundColor: 'white', position: 'absolute', bottom: 0, shadowOpacity: 3 }}>
-                <TouchableOpacity onPress={() => {
-                    navigation.navigate(EDIT_CONTACT_ROUTE, {
-                        contact: contactData
-                    });
-                }}>
-                    <View style={{ flex: 1 }}>
-                        Edit Contact
-                    </View>
-                </TouchableOpacity>
-                <TouchableOpacity onPress={() => ModalAlert()}>
-                    <View style={{ flex: 1 }}>
-                        Delete Contact
-                    </View>
-                </TouchableOpacity>
-            </View>
-
-        )
-    }
-
     useEffect(() => {
         handleFetchDetail()
+
     }, [])
 
 
@@ -92,11 +125,16 @@ const DetailContactScreen = () => {
                         <CustomLoader />
                     ) : (
                         <View>
-                            <Text style={{ fontWeight: 'bold', fontSize: 18, marginLeft: 16, marginTop: 16, marginBottom: 8 }}>{contactData?.firstName}</Text></View>)
-                }
+                            <View style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', marginVertical: 25 }}>
+                                <Image source={{ uri: validateImg(contactData?.photo ?? "") }} style={{ width: 100, height: 100, borderRadius: 50 }} />
+                                <Text style={{ fontWeight: 'bold', fontSize: 20, marginTop: 10 }}>{contactData?.firstName} {contactData?.lastName}</Text>
+                                <Text style={{ fontSize: 18, marginTop: 10 }}>{contactData?.age} Years</Text>
 
-                {
-                    renderMenuBottom()
+                               
+                            </View>
+                            {renderMenu()}
+                        </View>
+                           )
                 }
             </View>
         </Provider>

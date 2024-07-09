@@ -1,5 +1,6 @@
 import { IRequestContact } from "../data/contact"
 import { PROVIDER_DELETE, PROVIDER_GET, PROVIDER_POST, PROVIDER_PUT } from "../helper/provider_api"
+import { IMG_DUMMY } from "../utils/constant"
 
 export const fetchAllContacts = async () => {
     const response = await PROVIDER_GET(`contact`)
@@ -11,7 +12,7 @@ export const addContact = async (dataInput: IRequestContact) => {
         "firstName": dataInput.firstName,
         "lastName": dataInput.lastName,
         "age": dataInput.age,
-        "photo": "https://gravatar.com/avatar/0d585aed16b443a86d43aaf04bdf0b97?s=400&d=mp&r=x",
+        "photo": dataInput.photo ?? IMG_DUMMY,
     }
     console.log("addContact", data)
     const response = await PROVIDER_POST(`contact`, data, true)
@@ -28,7 +29,7 @@ export const updateContact = async (dataInput: IRequestContact, id: string) => {
         "firstName": dataInput.firstName,
         "lastName": dataInput.lastName,
         "age": dataInput.age,
-        "photo": "https://gravatar.com/avatar/0d585aed16b443a86d43aaf04bdf0b97?s=400&d=mp&r=x",
+        "photo": dataInput.photo ?? IMG_DUMMY,
     }
     console.log("updateContact", data)
     const response = await PROVIDER_PUT(`contact/${id}`, data, true)

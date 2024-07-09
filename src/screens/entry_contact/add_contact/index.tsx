@@ -14,6 +14,7 @@ const AddContactScreen = () => {
         firstName: '',
         lastName: '',
         age: 0,
+        photo:''
     })
     const [loading, setLoading] = useState<boolean>(false)
 
@@ -33,7 +34,7 @@ const AddContactScreen = () => {
 
     const handleSubmit = async () => {
         console.log(valueInput)
-        if (valueInput.firstName == "" || valueInput.lastName == "" || valueInput.age == 0) {
+        if (valueInput.firstName == "" || valueInput.lastName == "" || valueInput.age == 0 || valueInput.photo == "") {
             Toast.fail("Please fill all field", 1)
         } else {
             setLoading(true)
@@ -54,7 +55,7 @@ const AddContactScreen = () => {
             <View style={{ backgroundColor: '#fff', flex: 1 }}>
                 <List style={{ padding: 16 }}>
                     <List.Item style={{ borderWidth: 0.5, marginBottom: 16, borderColor: 'grey' }}>
-                        <Text>Firstname</Text>
+                        <Text style={{ fontWeight: 'bold' }}>Firstname</Text>
                         <InputItem
                             textAlign='left'
                             // value={"123"}
@@ -64,7 +65,7 @@ const AddContactScreen = () => {
                         </InputItem>
                     </List.Item>
                     <List.Item style={{ borderWidth: 0.5, marginBottom: 16, borderColor: 'grey' }}>
-                        <Text>Lastname</Text>
+                        <Text style={{ fontWeight: 'bold' }}>Lastname</Text>
                         <InputItem
                             // value={"123"}
                             name='lastname'
@@ -73,7 +74,7 @@ const AddContactScreen = () => {
                         </InputItem>
                     </List.Item>
                     <List.Item style={{ borderWidth: 0.5, marginBottom: 16, borderColor: 'grey' }}>
-                        <Text>Age</Text>
+                        <Text style={{ fontWeight: 'bold' }}>Age</Text>
                         <InputItem
                             // value={"123"}
                             type='number'
@@ -82,8 +83,14 @@ const AddContactScreen = () => {
                             placeholder="Insert Age">
                         </InputItem>
                     </List.Item>
-                    <List.Item>
-                        <Text>Photo</Text>
+                    <List.Item style={{ borderWidth: 0.5, marginBottom: 16, borderColor: 'grey' }}>
+                        <Text style={{ fontWeight: 'bold' }}>Photo (Link)</Text>
+                        <InputItem
+                            // value={"123"}
+                            name='photo'
+                            onChange={(value: any) => setValueInput({ ...valueInput, photo: value })}
+                            placeholder="Insert Link https//...">
+                        </InputItem>
                     </List.Item>
                     <Button type='primary' onPress={handleSubmit} loading={loading}>Submit</Button>
                 </List>
