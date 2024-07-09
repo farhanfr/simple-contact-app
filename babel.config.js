@@ -1,1 +1,3 @@
-module.exports = {presets: ['@babel/preset-env']}
+module.exports = {
+  presets: ['module:@react-native/babel-preset'],
+};
